@@ -2,7 +2,7 @@ CC=clang
 CFLAGS=-Wall -Wextra -pedantic -std=gnu99 -I./include -I/usr/local/include
 CFLAGSLINK=-lpari -lm -L/usr/local/lib/ 
 DEBUG_FLAGS=-g
-BENCH_FLAGS=-DNDEBUG -O3 -Os -march=native -mtune=native
+BENCH_FLAGS=-DNDEBUG -O3 -Os -mcpu=apple-m1 -mtune=native
 
 default: all
 

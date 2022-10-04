@@ -12,9 +12,9 @@
 
 static __inline__ uint64_t rdtsc(void)
 {
-    uint32_t hi, lo;
-    __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
-    return lo | (uint64_t) hi << 32;
+    uint64_t res;
+    asm volatile("mrs %0, cntvct_el0" : "=r" (res));
+    return res;
 }
 
 int main(int argc, char **argv) {

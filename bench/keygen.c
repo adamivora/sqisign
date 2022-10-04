@@ -3,7 +3,7 @@
 #include <getopt.h>
 #include <inttypes.h>
 #include <stdio.h>
-#include <time.h> 
+#include <time.h>
 #include <pari/pari.h>
 
 #include "precomputed.h"
@@ -11,14 +11,14 @@
 
 static __inline__ uint64_t rdtsc(void)
 {
-    uint32_t hi, lo;
-    __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
-    return lo | (uint64_t) hi << 32;
+    uint64_t res;
+    asm volatile("mrs %0, cntvct_el0" : "=r" (res));
+    return res;
 }
 
 int main(int argc, char **argv) {
   int samples = 100, seed = 1;
-  
+
   int opt;
   while ((opt = getopt(argc, argv, "s:r:h")) != -1) {
     switch (opt) {
@@ -35,10 +35,10 @@ int main(int argc, char **argv) {
       exit(-1);
     }
   }
-  
+
   pari_init(800000000, 1<<18);
   init_precomputations();
-  
+
   setrand(mkintn(1, seed));
   srand48(seed);
 
@@ -54,8 +54,8 @@ int main(int argc, char **argv) {
     c += rdtsc();
     t += clock();
 
-    printf("%" PRIu64 "\t%.3lf\n", c, 1000. * t / CLOCKS_PER_SEC);   
+    printf("%" PRIu64 "\t%.3lf\n", c, 1000. * t / CLOCKS_PER_SEC);
   }
-    
+
   return 0;
 }
